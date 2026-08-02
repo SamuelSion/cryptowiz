@@ -1,0 +1,95 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  height: min(72vh, 600px);
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #07090b;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.imageLayer,
+.patternLayer {
+  position: absolute;
+  inset: -25% 0 -25%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.imageLayer {
+  background-image: url("/images/hero-bg.svg");
+  background-size: cover;
+  background-position: center 20%;
+  background-repeat: no-repeat;
+  opacity: 0.9;
+}
+
+[data-theme="light"] .imageLayer {
+  opacity: 0.5;
+}
+
+.patternLayer {
+  background-image: repeating-linear-gradient(
+    115deg,
+    transparent 0 68px,
+    var(--border-subtle) 68px 69px
+  );
+  mask-image: radial-gradient(ellipse at 50% 35%, black 0%, transparent 70%);
+  opacity: 0.5;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 35%,
+    transparent 0%,
+    var(--bg-app) 92%
+  );
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 20px;
+  will-change: transform, opacity;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: var(--brand);
+  text-transform: uppercase;
+  margin: 0 0 14px;
+}
+
+.title {
+  font-size: clamp(44px, 9vw, 88px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f2fbf6;
+  line-height: 1;
+  margin: 0;
+}
+
+.titleGlow {
+  color: var(--brand);
+  text-shadow: 0 0 28px var(--brand-glow), 0 0 64px var(--brand-glow);
+}
+
+.tagline {
+  margin: 22px auto 0;
+  max-width: 520px;
+  color: #c3d2cb;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+[data-theme="light"] .tagline {
+  color: var(--text-secondary);
+}

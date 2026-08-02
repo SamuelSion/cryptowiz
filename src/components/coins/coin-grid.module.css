@@ -1,0 +1,84 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 620px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 920px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.skeletonCard {
+  height: 118px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    100deg,
+    var(--bg-surface) 40%,
+    var(--bg-elevated) 50%,
+    var(--bg-surface) 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border: 1px solid var(--border-subtle);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -20% 0;
+  }
+}
+
+.errorState {
+  border: 1px dashed var(--negative);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.errorMessage {
+  color: var(--negative);
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.errorHint {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0 0 14px;
+  line-height: 1.6;
+}
+
+.retryButton {
+  background: var(--brand);
+  color: var(--brand-contrast);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  filter: brightness(1.08);
+}
+
+.emptyMessage {
+  color: var(--text-secondary);
+}

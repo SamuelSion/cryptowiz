@@ -1,0 +1,50 @@
+.switch {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--bg-app);
+  border: 1px solid var(--border-strong);
+  padding: 2px;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+
+.knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  flex-shrink: 0;
+  margin-inline-start: 0;
+  transition: margin-inline-start var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.input:checked + .track {
+  background: color-mix(in srgb, var(--brand) 20%, var(--bg-app));
+  border-color: var(--brand);
+}
+
+.input:checked + .track .knob {
+  background: var(--brand);
+  margin-inline-start: calc(100% - 16px);
+  box-shadow: 0 0 10px var(--brand-glow);
+}
+
+.input:focus-visible + .track {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}

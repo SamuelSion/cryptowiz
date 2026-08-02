@@ -1,0 +1,171 @@
+.emptyState {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.emptyHint {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+.chipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Palette matches LINE_COLORS in reports-page.tsx, kept in sync by hand. */
+.chipColor0 { border-color: #39ff8a; }
+.chipColor1 { border-color: #ffb020; }
+.chipColor2 { border-color: #4ea1ff; }
+.chipColor3 { border-color: #ff5d8f; }
+.chipColor4 { border-color: #c792ff; }
+
+.dotColor0 { background: #39ff8a; }
+.dotColor1 { background: #ffb020; }
+.dotColor2 { background: #4ea1ff; }
+.dotColor3 { background: #ff5d8f; }
+.dotColor4 { background: #c792ff; }
+
+.chartCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px 12px 12px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Charts are built assuming LTR (recharts positions axis-tick text
+   relative to text-anchor, which is direction-relative in SVG - under our
+   page's global RTL, that flips the Y-axis price labels inward, into the
+   plot, instead of outward into their own margin). Forcing LTR on just
+   the chart-rendering wrapper - not the whole card, which also holds
+   Hebrew status text that should stay RTL-aligned - keeps the labels
+   cleanly outside the chart like a normal price axis. */
+.chartInner {
+  direction: ltr;
+}
+
+.chartInner text {
+  direction: ltr;
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.chartTypeToggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.toggleButton:hover {
+  color: var(--text-primary);
+}
+
+.toggleButtonActive {
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
+
+.toggleButtonActive:hover {
+  color: var(--brand-contrast);
+}
+
+.coinSelect {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: 9px 12px;
+}
+
+.intervalRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.intervalButton {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.intervalButton:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.intervalButtonActive {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 12%, var(--bg-surface));
+}
+
+.statusMessage {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 60px 20px;
+  margin: 0;
+}
+
+.fallbackNote {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin: 0 0 8px;
+  padding: 0 4px;
+}

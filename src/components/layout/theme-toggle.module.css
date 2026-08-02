@@ -1,0 +1,40 @@
+.toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 2px;
+  transition: background var(--dur-med) var(--ease), border-color var(--dur-med) var(--ease);
+}
+
+.knob {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-app);
+  font-size: 11px;
+  flex-shrink: 0;
+  transition: margin-inline-start var(--dur-med) var(--ease), background var(--dur-med) var(--ease);
+  box-shadow: 0 0 0 1px var(--border-subtle);
+  margin-inline-start: 0;
+}
+
+.knobLight {
+  margin-inline-start: calc(100% - 20px);
+  background: var(--brand);
+}

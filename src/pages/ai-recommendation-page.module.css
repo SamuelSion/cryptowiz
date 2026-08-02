@@ -1,0 +1,248 @@
+.emptyState {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.emptyHint {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coinList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.coinOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.coinOption:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-elevated);
+}
+
+.coinIcon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.coinName {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.coinSymbol {
+  margin-inline-start: auto;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  direction: ltr;
+}
+
+.recommendButton {
+  margin-top: 8px;
+  background: var(--brand);
+  color: var(--brand-contrast);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.recommendButton:hover {
+  filter: brightness(1.08);
+}
+
+.recommendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.errorText {
+  color: var(--negative);
+  font-size: 13px;
+  margin: 2px 2px 0;
+}
+
+.resultCard {
+  position: relative;
+  min-height: 220px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.infoTooltipCorner {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+
+.placeholder {
+  color: var(--text-tertiary);
+  margin: auto;
+}
+
+.verdictRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.verdictBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.summary {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.verdict-buy {
+  background: color-mix(in srgb, var(--positive) 18%, transparent);
+  color: var(--positive);
+}
+
+.verdict-hold {
+  background: color-mix(in srgb, #ffb020 18%, transparent);
+  color: #ffb020;
+}
+
+.verdict-avoid {
+  background: color-mix(in srgb, var(--negative) 18%, transparent);
+  color: var(--negative);
+}
+
+.prosConsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 560px) {
+  .prosConsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.prosConsColumn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.prosConsHeading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--text-secondary);
+}
+
+.prosIcon {
+  color: var(--positive);
+  font-size: 11px;
+}
+
+.consIcon {
+  color: var(--negative);
+  font-size: 11px;
+}
+
+.prosConsList {
+  margin: 0;
+  padding-inline-start: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.explanation {
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: min-content;
+  column-gap: 16px;
+  row-gap: 4px;
+  width: 100%;
+  margin: 4px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.statGrid dt {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  align-self: end;
+  text-align: right;
+}
+
+.statGrid dd {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+}

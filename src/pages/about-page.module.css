@@ -1,0 +1,82 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.cardTitle {
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.text {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 14.5px;
+  margin: 0 0 14px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.photo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 2px solid var(--brand);
+  object-fit: cover;
+  box-shadow: 0 0 0 4px var(--brand-glow);
+}
+
+.name {
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0;
+}
+
+.role {
+  color: var(--text-tertiary);
+  font-size: 13px;
+  margin: 2px 0 0;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.contactLink {
+  color: var(--brand);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contactLink:hover {
+  text-decoration: underline;
+}
+
+.contactDivider {
+  color: var(--text-tertiary);
+}

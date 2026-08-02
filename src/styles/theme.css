@@ -1,0 +1,135 @@
+/* ==========================================================================
+   CryptoWiz design tokens
+   Signature idea: a glowing "wizardry" spark in kryptonite green, set
+   against a near-black trading-terminal background (Bloomberg / exchange
+   inspired)  Light theme keeps the same green but deepened for contrast
+    on a bright surface.
+   ========================================================================== */
+
+:root {
+  /* type */
+  --font-display: "Space Grotesk", "Heebo", sans-serif;
+  --font-body: "Inter", "Heebo", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* radius / motion */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-med: 320ms;
+}
+
+/* -------------------------------- dark (default) ------------------------ */
+:root,
+[data-theme="dark"] {
+  --bg-app: #07090b;
+  --bg-surface: #0f1419;
+  --bg-elevated: #161c22;
+  --bg-elevated-hover: #1c242c;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --text-primary: #eef2f0;
+  --text-secondary: #8b9a94;
+  --text-tertiary: #5c6b66;
+
+  --brand: #39ff8a;
+  --brand-dim: #1f8a4d;
+  --brand-glow: rgba(57, 255, 138, 0.35);
+  --brand-contrast: #04140a;
+
+  --positive: #2ee6a6;
+  --negative: #ff4d6a;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px rgba(0, 0, 0, 0.35);
+  --scrim: rgba(3, 5, 6, 0.72);
+}
+
+/* -------------------------------- light --------------------------------- */
+[data-theme="light"] {
+  --bg-app: #f4f6f5;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-elevated-hover: #eef2f0;
+  --border-subtle: rgba(10, 20, 15, 0.08);
+  --border-strong: rgba(10, 20, 15, 0.16);
+
+  --text-primary: #0d1512;
+  --text-secondary: #4a5a53;
+  --text-tertiary: #7c8b84;
+
+  --brand: #0e8f4f;
+  --brand-dim: #0b7040;
+  --brand-glow: rgba(14, 143, 79, 0.22);
+  --brand-contrast: #ffffff;
+
+  --positive: #0e8f4f;
+  --negative: #d1233f;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 6px 18px rgba(15, 30, 22, 0.08);
+  --scrim: rgba(20, 30, 25, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: background var(--dur-med) var(--ease), color var(--dur-med) var(--ease);
+  direction: rtl;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+.mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--brand-glow);
+  color: var(--text-primary);
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* focus visibility */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

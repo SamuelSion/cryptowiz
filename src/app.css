@@ -1,0 +1,29 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+}
+
+.page-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+.page-heading {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  margin: 48px 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.page-subheading {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin: 0 0 32px;
+  max-width: 640px;
+}

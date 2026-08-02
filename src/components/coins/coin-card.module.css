@@ -1,0 +1,114 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+
+/* A slow, per-card "breathing" glow. Every card runs the same animation
+   but starts at a different point via a negative delay derived from its
+   grid index (--card-index, set inline since it's a computed per-item
+   value with no finite set of static classes that would work). Because
+   the animation loops infinitely, adjacent cards are always a fraction of
+   a cycle apart, so scanning across the grid reads as one continuous wave
+   of color passing through — independent of whether a row holds 3, 4, or
+   any other number of cards. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: -1;
+  background: radial-gradient(circle, var(--brand-glow) 0%, transparent 68%);
+  filter: blur(18px);
+  animation: card-breathe 10s ease-in-out infinite;
+  animation-delay: calc(var(--card-index, 0) * -0.45s);
+}
+
+@keyframes card-breathe {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(0.82) hue-rotate(0deg);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.18) hue-rotate(50deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card::before {
+    animation: none;
+    opacity: 0.14;
+  }
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.cardTracked {
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--border-subtle));
+  box-shadow: var(--shadow-card), 0 0 0 1px var(--brand-glow);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--bg-elevated);
+}
+
+.titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.symbol {
+  display: block;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  direction: ltr;
+  text-align: right;
+}
+
+.price {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.footerLabel {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}

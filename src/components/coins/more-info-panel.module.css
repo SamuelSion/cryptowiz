@@ -1,0 +1,80 @@
+.wrapper {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 14px;
+  padding-top: 10px;
+}
+
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.chevron {
+  transition: transform var(--dur-fast) var(--ease);
+  font-size: 15px;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-med) var(--ease);
+}
+
+.panelOpen {
+  grid-template-rows: 1fr;
+}
+
+.panel > * {
+  overflow: hidden;
+}
+
+.status {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin: 8px 0 0;
+  overflow: hidden;
+}
+
+.statusError {
+  color: var(--negative);
+  font-size: 12px;
+  margin: 8px 0 0;
+  overflow: hidden;
+}
+
+.priceList {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.currencyCode {
+  color: var(--text-tertiary);
+}
+
+.priceValue {
+  color: var(--text-primary);
+  font-weight: 500;
+}
