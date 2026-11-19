@@ -1,6 +1,6 @@
 import { store } from "../store/store";
 import { coinsSlice } from "../store/slices/coins-slice";
-import { fetchTopCoins } from "../api/coingecko-api";
+import { coinGeckoService } from "./coingecko-service";
 
 // Fetches and caches the top 100 coins. Dispatches actions directly
 // (this is a class, not a component, so Hooks aren't available).
@@ -16,7 +16,7 @@ class CoinsService {
     store.dispatch(coinsSlice.actions.startLoadingCoins());
 
     try {
-      const coins = await fetchTopCoins();
+      const coins = await coinGeckoService.fetchTopCoins();
       store.dispatch(coinsSlice.actions.setCoins(coins));
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to load coins";
