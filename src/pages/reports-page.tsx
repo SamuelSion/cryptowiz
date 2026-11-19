@@ -1,28 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { useAppSelector } from "../store/hooks";
 import { coinsService } from "../services/coins-service";
 import { useLivePrices } from "../hooks/use-live-prices";
 import { useCandles } from "../hooks/use-candles";
 import { INTERVAL_OPTIONS } from "../constants/report-intervals";
-import CandlestickChart from "../components/coins/candlestick-chart";
-import { formatPriceTick } from "../utils/format-price";
-import { formatFullDate } from "../utils/format-date";
+import ReportsControls from "../components/reports/reports-controls";
+import type { ViewMode, SingleStyle } from "../components/reports/reports-controls";
+import AllCoinsLiveChart from "../components/reports/all-coins-live-chart";
+import SingleCoinLineChart from "../components/reports/single-coin-line-chart";
+import SingleCoinCandleChart from "../components/reports/single-coin-candle-chart";
 import styles from "./reports-page.module.css";
-
-const LINE_COLORS = ["#39ff8a", "#ffb020", "#4ea1ff", "#ff5d8f", "#c792ff"];
-
-type ViewMode = "all-live" | "single";
-type SingleStyle = "line" | "candles";
 
 export default function ReportsPage() {
   const { items: allCoins } = useAppSelector((state) => state.coins);
@@ -55,8 +42,6 @@ export default function ReportsPage() {
 
   function handleStyleChange(nextStyle: SingleStyle) {
     setSingleStyle(nextStyle);
-    // Candlesticks need a real interval - "live" is only meaningful for a
-    // running line, not a candle size.
     if (nextStyle === "candles" && intervalId === "live") {
       setIntervalId("1h");
     }
@@ -73,7 +58,6 @@ export default function ReportsPage() {
   const { history: allHistory, status: allStatus, source: allSource } = useLivePrices(
     viewMode === "all-live" ? trackedCoinRefs : []
   );
-
   const allLiveChartData = useMemo(
     () =>
       allHistory.map((point) => {
@@ -155,21 +139,11 @@ export default function ReportsPage() {
     [candles, candleTimeFormatter]
   );
 
+  const isMonthInterval = selectedInterval.id === "1M";
+
   return (
     <div className="page-container">
-      <h2 className="page-heading">דו״ח זמן אמת</h2>
-      <p className="page-subheading">
-        המחירים מתעדכנים בבקשה אחת בודדת עבור כל המטבעות שסימנתם, במחיר דולר (USD).
-        {viewMode === "all-live" &&
-          allSource === "kraken" &&
-          " (עדכון כל שנייה ישירות מבורסת Kraken - ללא מפתח)"}
-        {viewMode === "all-live" &&
-          allSource === "cryptocompare" &&
-          " (עדכון כל שנייה דרך CryptoCompare)"}
-        {viewMode === "all-live" &&
-          allSource === "coinpaprika" &&
-          " (עדכון כל 4 שניות דרך CoinPaprika - אחד מהמטבעות שסימנתם לא נסחר ב-Kraken)"}
-      </p>
+      <h1 className="page-heading">דו״ח זמן אמת</h1>
 
       {trackedCoins.length === 0 ? (
         <div className={styles.emptyState}>
@@ -180,321 +154,53 @@ export default function ReportsPage() {
         </div>
       ) : (
         <>
-          <div className={styles.controlsRow}>
-            <div className={styles.chartTypeToggle} role="tablist" aria-label="מצב תצוגה">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={viewMode === "all-live"}
-                className={`${styles.toggleButton} ${
-                  viewMode === "all-live" ? styles.toggleButtonActive : ""
-                }`}
-                onClick={() => setViewMode("all-live")}
-              >
-                כל המטבעות (חי)
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={viewMode === "single"}
-                className={`${styles.toggleButton} ${
-                  viewMode === "single" ? styles.toggleButtonActive : ""
-                }`}
-                onClick={() => setViewMode("single")}
-              >
-                מטבע בודד
-              </button>
-            </div>
-
-            {viewMode === "single" && trackedCoins.length > 1 && (
-              <select
-                className={styles.coinSelect}
-                value={focusCoinId ?? ""}
-                onChange={(event) => setFocusCoinId(event.target.value)}
-                aria-label="בחר מטבע למיקוד"
-              >
-                {trackedCoins.map((coin) => (
-                  <option key={coin.id} value={coin.id}>
-                    {coin.name}
-                  </option>
-                ))}
-              </select>
-            )}
-
-            {viewMode === "single" && (
-              <div className={styles.chartTypeToggle} role="tablist" aria-label="סגנון תרשים">
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={singleStyle === "line"}
-                  className={`${styles.toggleButton} ${
-                    singleStyle === "line" ? styles.toggleButtonActive : ""
-                  }`}
-                  onClick={() => handleStyleChange("line")}
-                >
-                  קו
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={singleStyle === "candles"}
-                  className={`${styles.toggleButton} ${
-                    singleStyle === "candles" ? styles.toggleButtonActive : ""
-                  }`}
-                  onClick={() => handleStyleChange("candles")}
-                >
-                  נרות יפניים
-                </button>
-              </div>
-            )}
-          </div>
-
-          {viewMode === "single" && (
-            <div className={styles.intervalRow} role="tablist" aria-label="טווח זמן">
-              {INTERVAL_OPTIONS.filter(
-                (option) => singleStyle === "line" || option.krakenMinutes !== null
-              ).map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={intervalId === option.id}
-                  className={`${styles.intervalButton} ${
-                    intervalId === option.id ? styles.intervalButtonActive : ""
-                  }`}
-                  onClick={() => setIntervalId(option.id)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
+          <ReportsControls
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            singleStyle={singleStyle}
+            onStyleChange={handleStyleChange}
+            intervalId={intervalId}
+            onIntervalChange={setIntervalId}
+            trackedCoins={trackedCoins}
+            focusCoinId={focusCoinId}
+            onFocusCoinChange={setFocusCoinId}
+          />
 
           {viewMode === "all-live" && (
-            <>
-              <div className={styles.chips}>
-                {trackedCoins.map((coin, index) => (
-                  <span
-                    key={coin.id}
-                    className={`${styles.chip} ${styles[`chipColor${index % LINE_COLORS.length}`]}`}
-                  >
-                    <span
-                      className={`${styles.chipDot} ${styles[`dotColor${index % LINE_COLORS.length}`]}`}
-                    />
-                    {coin.name}
-                  </span>
-                ))}
-              </div>
-
-              {allStatus === "error" ? (
-                <div className={styles.chartCard}>
-                  <p className={styles.statusMessage}>
-                    שגיאה בטעינת המחירים החיים. נסו לרענן את הדף בעוד רגע.
-                  </p>
-                </div>
-              ) : (
-                <div className={styles.chartCard}>
-                  <div className={styles.chartInner} dir="ltr">
-                    <ResponsiveContainer width="100%" height={420}>
-                      <LineChart
-                        data={allLiveChartData}
-                        margin={{ top: 12, right: 24, bottom: 8, left: 12 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
-                        <XAxis dataKey="time" stroke="var(--text-tertiary)" fontSize={12} />
-                        <YAxis
-                          stroke="var(--text-secondary)"
-                          tick={{ fill: "var(--text-secondary)", fontSize: 12.5 }}
-                          tickLine={{ stroke: "var(--text-tertiary)" }}
-                          axisLine={{ stroke: "var(--border-strong)" }}
-                          scale="log"
-                          domain={["auto", "auto"]}
-                          allowDataOverflow={false}
-                          width={80}
-                          tickFormatter={formatPriceTick}
-                        />
-                        <Tooltip
-                          contentStyle={{
-                            background: "var(--bg-elevated)",
-                            border: "1px solid var(--border-strong)",
-                            borderRadius: 10,
-                          }}
-                          labelStyle={{ color: "var(--text-secondary)" }}
-                          formatter={(value) => formatPriceTick(Number(value))}
-                          labelFormatter={(_label, payload) =>
-                            payload?.[0]?.payload?.fullTime
-                              ? formatFullDate(payload[0].payload.fullTime, true)
-                              : ""
-                          }
-                        />
-                        <Legend />
-                        {allSymbols.map((symbol, index) => (
-                          <Line
-                            key={symbol}
-                            type="monotone"
-                            dataKey={symbol}
-                            stroke={LINE_COLORS[index % LINE_COLORS.length]}
-                            dot={false}
-                            strokeWidth={2}
-                            isAnimationActive={false}
-                            connectNulls
-                          />
-                        ))}
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              )}
-            </>
+            <AllCoinsLiveChart
+              trackedCoins={trackedCoins}
+              allSymbols={allSymbols}
+              chartData={allLiveChartData}
+              status={allStatus}
+              source={allSource}
+            />
           )}
 
           {viewMode === "single" && singleStyle === "line" && (
             <div className={styles.chartCard}>
-              {intervalId === "live" ? (
-                singleLiveStatus === "error" ? (
-                  <p className={styles.statusMessage}>
-                    שגיאה בטעינת המחירים החיים. נסו לרענן את הדף בעוד רגע.
-                  </p>
-                ) : (
-                  <div className={styles.chartInner} dir="ltr">
-                    <ResponsiveContainer width="100%" height={420}>
-                      <LineChart
-                        data={singleLiveChartData}
-                        margin={{ top: 12, right: 24, bottom: 8, left: 12 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
-                        <XAxis dataKey="time" stroke="var(--text-tertiary)" fontSize={12} />
-                        <YAxis
-                          stroke="var(--text-secondary)"
-                          tick={{ fill: "var(--text-secondary)", fontSize: 12.5 }}
-                          tickLine={{ stroke: "var(--text-tertiary)" }}
-                          axisLine={{ stroke: "var(--border-strong)" }}
-                          domain={["auto", "auto"]}
-                          width={80}
-                          tickFormatter={formatPriceTick}
-                        />
-                        <Tooltip
-                          contentStyle={{
-                            background: "var(--bg-elevated)",
-                            border: "1px solid var(--border-strong)",
-                            borderRadius: 10,
-                          }}
-                          labelStyle={{ color: "var(--text-secondary)" }}
-                          formatter={(value) => formatPriceTick(Number(value))}
-                          labelFormatter={(_label, payload) =>
-                            payload?.[0]?.payload?.fullTime
-                              ? formatFullDate(payload[0].payload.fullTime, true)
-                              : ""
-                          }
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="price"
-                          stroke={LINE_COLORS[0]}
-                          dot={false}
-                          strokeWidth={2}
-                          isAnimationActive={false}
-                          connectNulls
-                          name={focusCoin?.name}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                )
-              ) : candleStatus === "loading" ? (
-                <p className={styles.statusMessage}>טוען נתוני מחיר...</p>
-              ) : candleStatus === "unsupported" && focusCoin ? (
-                <p className={styles.statusMessage}>
-                  לא הצלחנו למצוא היסטוריית מחיר עבור {focusCoin.name} (לא ב-Kraken ולא
-                  ב-CoinGecko). נסו מטבע אחר, או עברו לתצוגת "חי".
-                </p>
-              ) : candleStatus === "error" ? (
-                <p className={styles.statusMessage}>שגיאה בטעינת נתוני המחיר. נסו שוב בעוד רגע.</p>
-              ) : (
-                <>
-                  {candleSource === "coingecko-fallback" && (
-                    <p className={styles.fallbackNote}>
-                      {focusCoin?.name} לא נסחר ב-Kraken - הנתונים כאן מגיעים מ-CoinGecko
-                      (רזולוציה קצת שונה מהרגילה).
-                    </p>
-                  )}
-                  <div className={styles.chartInner} dir="ltr">
-                  <ResponsiveContainer width="100%" height={420}>
-                    <LineChart
-                      data={historicalLineData}
-                      margin={{ top: 12, right: 24, bottom: 8, left: 12 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
-                      <XAxis dataKey="time" stroke="var(--text-tertiary)" fontSize={12} minTickGap={24} />
-                      <YAxis
-                        stroke="var(--text-secondary)"
-                        tick={{ fill: "var(--text-secondary)", fontSize: 12.5 }}
-                        tickLine={{ stroke: "var(--text-tertiary)" }}
-                        axisLine={{ stroke: "var(--border-strong)" }}
-                        domain={["auto", "auto"]}
-                        width={80}
-                        tickFormatter={formatPriceTick}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          background: "var(--bg-elevated)",
-                          border: "1px solid var(--border-strong)",
-                          borderRadius: 10,
-                        }}
-                        labelStyle={{ color: "var(--text-secondary)" }}
-                        formatter={(value) => formatPriceTick(Number(value))}
-                        labelFormatter={(_label, payload) =>
-                          payload?.[0]?.payload?.fullTime
-                            ? formatFullDate(payload[0].payload.fullTime, selectedInterval.id !== "1M")
-                            : ""
-                        }
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="price"
-                        stroke={LINE_COLORS[0]}
-                        dot={false}
-                        strokeWidth={2}
-                        isAnimationActive={false}
-                        name={focusCoin?.name}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                  </div>
-                </>
-              )}
+              <SingleCoinLineChart
+                focusCoin={focusCoin}
+                isLive={intervalId === "live"}
+                liveStatus={singleLiveStatus}
+                liveChartData={singleLiveChartData}
+                candleStatus={candleStatus}
+                candleSource={candleSource}
+                historicalChartData={historicalLineData}
+                isMonthInterval={isMonthInterval}
+              />
             </div>
           )}
 
           {viewMode === "single" && singleStyle === "candles" && (
             <div className={styles.chartCard}>
-              {candleStatus === "loading" && (
-                <p className={styles.statusMessage}>טוען נתוני נרות...</p>
-              )}
-              {candleStatus === "unsupported" && focusCoin && (
-                <p className={styles.statusMessage}>
-                  לא הצלחנו למצוא נתוני נרות עבור {focusCoin.name} (לא ב-Kraken ולא
-                  ב-CoinGecko). נסו מטבע אחר, או עברו לתצוגת קו.
-                </p>
-              )}
-              {candleStatus === "error" && (
-                <p className={styles.statusMessage}>שגיאה בטעינת נתוני הנרות. נסו שוב בעוד רגע.</p>
-              )}
-              {candleStatus === "loaded" && candles.length > 0 && (
-                <>
-                  {candleSource === "coingecko-fallback" && (
-                    <p className={styles.fallbackNote}>
-                      {focusCoin?.name} לא נסחר ב-Kraken - הנתונים כאן מגיעים מ-CoinGecko
-                      (רזולוציה קצת שונה מהרגילה).
-                    </p>
-                  )}
-                  <CandlestickChart
-                    candles={candles}
-                    timeLabelFormatter={candleTimeFormatter}
-                    fullDateFormatter={(timeMs) => formatFullDate(timeMs, selectedInterval.id !== "1M")}
-                  />
-                </>
-              )}
+              <SingleCoinCandleChart
+                focusCoin={focusCoin}
+                status={candleStatus}
+                source={candleSource}
+                candles={candles}
+                timeLabelFormatter={candleTimeFormatter}
+                isMonthInterval={isMonthInterval}
+              />
             </div>
           )}
         </>

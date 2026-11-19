@@ -3,7 +3,7 @@ import styles from "./about-page.module.css";
 export default function AboutPage() {
   return (
     <div className="page-container">
-      <h2 className="page-heading">אודות</h2>
+      <h1 className="page-heading">אודות</h1>
       <p className="page-subheading">קצת על הפרויקט ועל מי שבנה אותו.</p>
 
       <div className={styles.layout}>

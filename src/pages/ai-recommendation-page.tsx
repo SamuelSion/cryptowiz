@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import { coinsService } from "../services/coins-service";
-import { fetchCoinDetails } from "../api/coingecko-api";
-import { fetchAiRecommendation, buildCoinSummary } from "../api/openai-api";
+import { aiRecommendationService } from "../services/ai-recommendation-service";
 import AiDataInfoTooltip from "../components/coins/ai-data-info-tooltip";
-import type { AiRecommendation, CoinDetails } from "../types/coin";
+import AiProsCons from "../components/coins/ai-pros-cons";
+import AiStatGrid from "../components/coins/ai-stat-grid";
+import { openAiService } from "../services/openai-service";
+import type { AiRecommendation, CoinDetails } from "../models/coin";
 import styles from "./ai-recommendation-page.module.css";
 
 type RequestStatus = "idle" | "loading" | "loaded" | "error";
@@ -46,8 +48,8 @@ export default function AiRecommendationPage() {
     setRequestStatus("loading");
 
     try {
-      const details = await fetchCoinDetails(selectedCoinId);
-      const result = await fetchAiRecommendation(details);
+      const { details, recommendation: result } =
+        await aiRecommendationService.getRecommendation(selectedCoinId);
       setAnalyzedDetails(details);
       setRecommendation(result);
       setRequestStatus("loaded");
@@ -59,7 +61,7 @@ export default function AiRecommendationPage() {
 
   return (
     <div className="page-container">
-      <h2 className="page-heading">המלצת AI</h2>
+      <h1 className="page-heading">המלצת AI</h1>
       <p className="page-subheading">
         בחרו אחד מהמטבעות שאתם עוקבים אחריהם וקבלו המלצה מבוססת נתוני שוק בזמן אמת, שנשלחים
         ל-ChatGPT לניתוח.
@@ -89,7 +91,7 @@ export default function AiRecommendationPage() {
                     setErrorMessage(null);
                   }}
                 />
-                <img src={coin.image} alt="" className={styles.coinIcon} />
+                <img src={coin.image} alt={coin.name} className={styles.coinIcon} />
                 <span className={styles.coinName}>{coin.name}</span>
                 <span className={styles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
               </label>
@@ -109,7 +111,7 @@ export default function AiRecommendationPage() {
           <div className={styles.resultCard}>
             {analyzedDetails && requestStatus === "loaded" && (
               <div className={styles.infoTooltipCorner}>
-                <AiDataInfoTooltip summary={buildCoinSummary(analyzedDetails)} />
+                <AiDataInfoTooltip summary={openAiService.buildCoinSummary(analyzedDetails)} />
               </div>
             )}
             {requestStatus === "idle" && (
@@ -118,7 +120,7 @@ export default function AiRecommendationPage() {
             {requestStatus === "loading" && (
               <p className={styles.placeholder}>שולח את נתוני המטבע ל-ChatGPT...</p>
             )}
-            {requestStatus === "loaded" && recommendation && (
+            {requestStatus === "loaded" && recommendation && analyzedDetails && (
               <>
                 <div className={styles.verdictRow}>
                   <span
@@ -129,69 +131,11 @@ export default function AiRecommendationPage() {
                   <p className={styles.summary}>{recommendation.summary}</p>
                 </div>
 
-                {(recommendation.strengths.length > 0 || recommendation.risks.length > 0) && (
-                  <div className={styles.prosConsGrid}>
-                    {recommendation.strengths.length > 0 && (
-                      <div className={styles.prosConsColumn}>
-                        <h3 className={styles.prosConsHeading}>
-                          <span className={styles.prosIcon}>▲</span> נקודות לטובה
-                        </h3>
-                        <ul className={styles.prosConsList}>
-                          {recommendation.strengths.map((point, index) => (
-                            <li key={index}>{point}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {recommendation.risks.length > 0 && (
-                      <div className={styles.prosConsColumn}>
-                        <h3 className={styles.prosConsHeading}>
-                          <span className={styles.consIcon}>▼</span> סיכונים
-                        </h3>
-                        <ul className={styles.prosConsList}>
-                          {recommendation.risks.map((point, index) => (
-                            <li key={index}>{point}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <AiProsCons strengths={recommendation.strengths} risks={recommendation.risks} />
 
                 <p className={styles.explanation}>{recommendation.explanation}</p>
 
-                {analyzedDetails && (
-                  <dl className={styles.statGrid}>
-                    <dt>דירוג שווי שוק</dt>
-                    <dt>מרחק מהשיא ההיסטורי</dt>
-                    <dd className="mono-num">
-                      {analyzedDetails.market_cap_rank ? `#${analyzedDetails.market_cap_rank}` : "—"}
-                    </dd>
-                    <dd className="mono-num">
-                      {analyzedDetails.market_data.ath_change_percentage.usd.toFixed(1)}%
-                    </dd>
-
-                    <dt>אחוז מההיצע שכבר במחזור</dt>
-                    <dt>נזילות (מחזור יומי / שווי שוק)</dt>
-                    <dd className="mono-num">
-                      {analyzedDetails.market_data.max_supply
-                        ? `${(
-                            (analyzedDetails.market_data.circulating_supply /
-                              analyzedDetails.market_data.max_supply) *
-                            100
-                          ).toFixed(1)}%`
-                        : "ללא תקרת היצע"}
-                    </dd>
-                    <dd className="mono-num">
-                      {(
-                        (analyzedDetails.market_data.total_volume.usd /
-                          analyzedDetails.market_data.market_cap.usd) *
-                        100
-                      ).toFixed(2)}
-                      %
-                    </dd>
-                  </dl>
-                )}
+                <AiStatGrid details={analyzedDetails} />
               </>
             )}
           </div>

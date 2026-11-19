@@ -162,87 +162,8 @@
   color: var(--negative);
 }
 
-.prosConsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: 100%;
-}
-
-@media (max-width: 560px) {
-  .prosConsGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.prosConsColumn {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-}
-
-.prosConsHeading {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  margin: 0 0 8px;
-  color: var(--text-secondary);
-}
-
-.prosIcon {
-  color: var(--positive);
-  font-size: 11px;
-}
-
-.consIcon {
-  color: var(--negative);
-  font-size: 11px;
-}
-
-.prosConsList {
-  margin: 0;
-  padding-inline-start: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--text-primary);
-}
-
 .explanation {
   color: var(--text-primary);
   line-height: 1.8;
   font-size: 15px;
-}
-
-.statGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: min-content;
-  column-gap: 16px;
-  row-gap: 4px;
-  width: 100%;
-  margin: 4px 0 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.statGrid dt {
-  font-size: 12.5px;
-  color: var(--text-tertiary);
-  line-height: 1.4;
-  align-self: end;
-  text-align: right;
-}
-
-.statGrid dd {
-  margin: 0 0 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-align: right;
 }
