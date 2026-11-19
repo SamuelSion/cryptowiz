@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
-import { fetchOhlcKraken, UnsupportedByKrakenError } from "../api/kraken-api";
-import { fetchOhlcCoinGecko } from "../api/coingecko-api";
-import type { OhlcCandle } from "../types/coin";
+import { candleService } from "../services/candle-service";
+import type { CandleCoinRef, CandleSource } from "../services/candle-service";
+import { appConfig } from "../utils/app-config";
+import type { OhlcCandle } from "../models/coin";
 
-const REFRESH_MS = 30_000;
-
+export type { CandleCoinRef, CandleSource };
 export type CandleStatus = "loading" | "loaded" | "unsupported" | "error";
-export type CandleSource = "kraken" | "coingecko-fallback";
 
-export interface CandleCoinRef {
-  symbol: string;
-  coinId: string;
-}
-
-// Candlestick/historical-line data: Kraken first, CoinGecko as fallback.
 export function useCandles(
   coin: CandleCoinRef | null,
   intervalMinutes: number,
@@ -36,36 +29,23 @@ export function useCandles(
 
     async function load() {
       try {
-        const raw = await fetchOhlcKraken(coin!.symbol, intervalMinutes);
+        const result = await candleService.fetchCandles(
+          coin!,
+          intervalMinutes,
+          maxCandles,
+          coinGeckoDays
+        );
         if (isCancelled) return;
-        setSource("kraken");
-        const sliced = maxCandles > 0 ? raw.slice(-maxCandles) : raw;
-        setCandles(sliced);
-        setStatus("loaded");
-      } catch (krakenError) {
-        if (isCancelled) return;
-
-        // Only fall back for "not listed on Kraken", not other errors.
-        if (!(krakenError instanceof UnsupportedByKrakenError)) {
-          setStatus("error");
-          return;
-        }
-
-        try {
-          const fallbackRaw = await fetchOhlcCoinGecko(coin!.coinId, coinGeckoDays);
-          if (isCancelled) return;
-          setSource("coingecko-fallback");
-          const sliced = maxCandles > 0 ? fallbackRaw.slice(-maxCandles) : fallbackRaw;
-          setCandles(sliced);
-          setStatus(sliced.length > 0 ? "loaded" : "unsupported");
-        } catch {
-          if (!isCancelled) setStatus("unsupported");
-        }
+        setSource(result.source);
+        setCandles(result.candles);
+        setStatus(result.candles.length > 0 ? "loaded" : "unsupported");
+      } catch {
+        if (!isCancelled) setStatus("unsupported");
       }
     }
 
     load();
-    const intervalId = window.setInterval(load, REFRESH_MS);
+    const intervalId = window.setInterval(load, appConfig.candleRefreshIntervalMs);
 
     return () => {
       isCancelled = true;
