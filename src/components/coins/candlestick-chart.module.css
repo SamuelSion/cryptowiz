@@ -1,0 +1,29 @@
+.ltrWrapper {
+  direction: ltr;
+}
+
+.candleUp {
+  fill: var(--positive);
+  stroke: var(--positive);
+}
+
+.candleDown {
+  fill: var(--negative);
+  stroke: var(--negative);
+}
+
+.tooltip {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-primary);
+  direction: rtl;
+  text-align: right;
+}
+
+.tooltipDate {
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}

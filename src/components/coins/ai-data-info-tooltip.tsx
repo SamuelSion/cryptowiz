@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { CoinSummaryForAi } from "../../api/openai-api";
+import type { CoinSummaryForAi } from "../../services/openai-service";
 import styles from "./ai-data-info-tooltip.module.css";
 
 interface AiDataInfoTooltipProps {

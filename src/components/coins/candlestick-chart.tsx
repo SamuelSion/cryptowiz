@@ -1,6 +1,7 @@
 import { Bar, CartesianGrid, ComposedChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import type { OhlcCandle } from "../../types/coin";
+import type { OhlcCandle } from "../../models/coin";
 import { formatPriceTick } from "../../utils/format-price";
+import styles from "./candlestick-chart.module.css";
 
 interface CandlestickChartProps {
   candles: OhlcCandle[];
@@ -26,7 +27,7 @@ function Candle(props: CandleShapeProps) {
 
   const { open, close, high, low } = payload;
   const isUp = close >= open;
-  const color = isUp ? "var(--positive)" : "var(--negative)";
+  const colorClass = isUp ? styles.candleUp : styles.candleDown;
 
   const priceRange = high - low || 1;
   const priceToY = (price: number) => y + height * (1 - (price - low) / priceRange);
@@ -42,8 +43,8 @@ function Candle(props: CandleShapeProps) {
 
   return (
     <g>
-      <line x1={wickX} x2={wickX} y1={y} y2={y + height} stroke={color} strokeWidth={1} />
-      <rect x={bodyX} y={bodyTop} width={bodyWidth} height={bodyHeight} fill={color} />
+      <line x1={wickX} x2={wickX} y1={y} y2={y + height} className={colorClass} strokeWidth={1} />
+      <rect x={bodyX} y={bodyTop} width={bodyWidth} height={bodyHeight} className={colorClass} />
     </g>
   );
 }
@@ -62,22 +63,8 @@ function CandleTooltip({
   }
   const candle = payload[0].payload;
   return (
-    <div
-      dir="rtl"
-      style={{
-        background: "var(--bg-elevated)",
-        border: "1px solid var(--border-strong)",
-        borderRadius: 10,
-        padding: "8px 12px",
-        fontSize: 12,
-        color: "var(--text-primary)",
-        direction: "rtl",
-        textAlign: "right",
-      }}
-    >
-      <div style={{ color: "var(--text-secondary)", marginBottom: 4 }}>
-        {fullDateFormatter(candle.time)}
-      </div>
+    <div dir="rtl" className={styles.tooltip}>
+      <div className={styles.tooltipDate}>{fullDateFormatter(candle.time)}</div>
       <div>פתיחה: {formatPriceTick(candle.open)}</div>
       <div>שיא: {formatPriceTick(candle.high)}</div>
       <div>שפל: {formatPriceTick(candle.low)}</div>
@@ -99,7 +86,7 @@ export default function CandlestickChart({
 
   return (
     // Forced LTR so the Y-axis labels render outside the plot area.
-    <div style={{ direction: "ltr" }} dir="ltr">
+    <div className={styles.ltrWrapper} dir="ltr">
       <ResponsiveContainer width="100%" height={420}>
         <ComposedChart data={data} margin={{ top: 12, right: 24, bottom: 8, left: 12 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />

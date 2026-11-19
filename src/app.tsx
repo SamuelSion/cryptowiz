@@ -1,17 +1,10 @@
-import { useEffect, Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
 import { useAppSelector } from "./store/hooks";
 import Navbar from "./components/layout/navbar";
 import Footer from "./components/layout/footer";
-import HomePage from "./pages/home-page";
-import AiRecommendationPage from "./pages/ai-recommendation-page";
-import AboutPage from "./pages/about-page";
 import RemoveCoinDialog from "./components/coins/remove-coin-dialog";
-import PageLoadingSpinner from "./components/layout/page-loading-spinner";
+import AppRoutes from "./routes/app-routes";
 import "./app.css";
-
-// Lazy-loaded to keep recharts out of the main bundle.
-const ReportsPage = lazy(() => import("./pages/reports-page"));
 
 export default function App() {
   const themeMode = useAppSelector((state) => state.theme.mode);
@@ -24,19 +17,7 @@ export default function App() {
     <div className="app-shell">
       <Navbar />
       <main className="app-main">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/reports"
-            element={
-              <Suspense fallback={<PageLoadingSpinner />}>
-                <ReportsPage />
-              </Suspense>
-            }
-          />
-          <Route path="/ai-recommendation" element={<AiRecommendationPage />} />
-          <Route path="/about" element={<AboutPage />} />
-        </Routes>
+        <AppRoutes />
       </main>
       <Footer />
       <RemoveCoinDialog />
