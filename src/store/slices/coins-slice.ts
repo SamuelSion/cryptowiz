@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { CoinMarket } from "../../types/coin";
+import type { CoinMarket } from "../../models/coin";
 
 export interface CoinsState {
   items: CoinMarket[];

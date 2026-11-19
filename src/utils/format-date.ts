@@ -1,4 +1,5 @@
-// Unambiguous DD.MM.YYYY date, always with a year.
+// Unambiguous DD.MM.YYYY date, always with a year (axis ticks stay
+// compact, but tooltips need the full date).
 export function formatFullDate(timeMs: number, includeTime: boolean): string {
   const date = new Date(timeMs);
   const day = String(date.getDate()).padStart(2, "0");
