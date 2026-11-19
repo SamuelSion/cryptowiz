@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fetchCoinDetails } from "../../api/coingecko-api";
+import { coinGeckoService } from "../../services/coingecko-service";
 import styles from "./more-info-panel.module.css";
 
 interface MoreInfoPanelProps {
@@ -32,7 +32,7 @@ export default function MoreInfoPanel({ coinId }: MoreInfoPanelProps) {
     if (nextIsOpen && status === "idle") {
       setStatus("loading");
       try {
-        const details = await fetchCoinDetails(coinId);
+        const details = await coinGeckoService.fetchCoinDetails(coinId);
         setPrices({
           usd: details.market_data.current_price.usd,
           eur: details.market_data.current_price.eur,

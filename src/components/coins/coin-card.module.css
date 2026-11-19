@@ -10,13 +10,11 @@
 }
 
 /* A slow, per-card "breathing" glow. Every card runs the same animation
-   but starts at a different point via a negative delay derived from its
-   grid index (--card-index, set inline since it's a computed per-item
-   value with no finite set of static classes that would work). Because
-   the animation loops infinitely, adjacent cards are always a fraction of
-   a cycle apart, so scanning across the grid reads as one continuous wave
-   of color passing through — independent of whether a row holds 3, 4, or
-   any other number of cards. */
+   but starts at a different point, using one of the static per-index
+   delay classes generated below (.cardIndex0..99), so no inline style is
+   needed. Because the animation loops infinitely, adjacent cards are
+   always a fraction of a cycle apart, so scanning across the grid reads
+   as one continuous wave of color passing through. */
 .card::before {
   content: "";
   position: absolute;
@@ -25,7 +23,6 @@
   background: radial-gradient(circle, var(--brand-glow) 0%, transparent 68%);
   filter: blur(18px);
   animation: card-breathe 10s ease-in-out infinite;
-  animation-delay: calc(var(--card-index, 0) * -0.45s);
 }
 
 @keyframes card-breathe {
@@ -112,3 +109,106 @@
   font-size: 12px;
   color: var(--text-tertiary);
 }
+
+/* Static per-index animation-delay classes (0-99), replacing what
+   used to be a computed inline style. */
+.cardIndex0::before { animation-delay: -0.0s; }
+.cardIndex1::before { animation-delay: -0.45s; }
+.cardIndex2::before { animation-delay: -0.9s; }
+.cardIndex3::before { animation-delay: -1.35s; }
+.cardIndex4::before { animation-delay: -1.8s; }
+.cardIndex5::before { animation-delay: -2.25s; }
+.cardIndex6::before { animation-delay: -2.7s; }
+.cardIndex7::before { animation-delay: -3.15s; }
+.cardIndex8::before { animation-delay: -3.6s; }
+.cardIndex9::before { animation-delay: -4.05s; }
+.cardIndex10::before { animation-delay: -4.5s; }
+.cardIndex11::before { animation-delay: -4.95s; }
+.cardIndex12::before { animation-delay: -5.4s; }
+.cardIndex13::before { animation-delay: -5.85s; }
+.cardIndex14::before { animation-delay: -6.3s; }
+.cardIndex15::before { animation-delay: -6.75s; }
+.cardIndex16::before { animation-delay: -7.2s; }
+.cardIndex17::before { animation-delay: -7.65s; }
+.cardIndex18::before { animation-delay: -8.1s; }
+.cardIndex19::before { animation-delay: -8.55s; }
+.cardIndex20::before { animation-delay: -9.0s; }
+.cardIndex21::before { animation-delay: -9.45s; }
+.cardIndex22::before { animation-delay: -9.9s; }
+.cardIndex23::before { animation-delay: -10.35s; }
+.cardIndex24::before { animation-delay: -10.8s; }
+.cardIndex25::before { animation-delay: -11.25s; }
+.cardIndex26::before { animation-delay: -11.7s; }
+.cardIndex27::before { animation-delay: -12.15s; }
+.cardIndex28::before { animation-delay: -12.6s; }
+.cardIndex29::before { animation-delay: -13.05s; }
+.cardIndex30::before { animation-delay: -13.5s; }
+.cardIndex31::before { animation-delay: -13.95s; }
+.cardIndex32::before { animation-delay: -14.4s; }
+.cardIndex33::before { animation-delay: -14.85s; }
+.cardIndex34::before { animation-delay: -15.3s; }
+.cardIndex35::before { animation-delay: -15.75s; }
+.cardIndex36::before { animation-delay: -16.2s; }
+.cardIndex37::before { animation-delay: -16.65s; }
+.cardIndex38::before { animation-delay: -17.1s; }
+.cardIndex39::before { animation-delay: -17.55s; }
+.cardIndex40::before { animation-delay: -18.0s; }
+.cardIndex41::before { animation-delay: -18.45s; }
+.cardIndex42::before { animation-delay: -18.9s; }
+.cardIndex43::before { animation-delay: -19.35s; }
+.cardIndex44::before { animation-delay: -19.8s; }
+.cardIndex45::before { animation-delay: -20.25s; }
+.cardIndex46::before { animation-delay: -20.7s; }
+.cardIndex47::before { animation-delay: -21.15s; }
+.cardIndex48::before { animation-delay: -21.6s; }
+.cardIndex49::before { animation-delay: -22.05s; }
+.cardIndex50::before { animation-delay: -22.5s; }
+.cardIndex51::before { animation-delay: -22.95s; }
+.cardIndex52::before { animation-delay: -23.4s; }
+.cardIndex53::before { animation-delay: -23.85s; }
+.cardIndex54::before { animation-delay: -24.3s; }
+.cardIndex55::before { animation-delay: -24.75s; }
+.cardIndex56::before { animation-delay: -25.2s; }
+.cardIndex57::before { animation-delay: -25.65s; }
+.cardIndex58::before { animation-delay: -26.1s; }
+.cardIndex59::before { animation-delay: -26.55s; }
+.cardIndex60::before { animation-delay: -27.0s; }
+.cardIndex61::before { animation-delay: -27.45s; }
+.cardIndex62::before { animation-delay: -27.9s; }
+.cardIndex63::before { animation-delay: -28.35s; }
+.cardIndex64::before { animation-delay: -28.8s; }
+.cardIndex65::before { animation-delay: -29.25s; }
+.cardIndex66::before { animation-delay: -29.7s; }
+.cardIndex67::before { animation-delay: -30.15s; }
+.cardIndex68::before { animation-delay: -30.6s; }
+.cardIndex69::before { animation-delay: -31.05s; }
+.cardIndex70::before { animation-delay: -31.5s; }
+.cardIndex71::before { animation-delay: -31.95s; }
+.cardIndex72::before { animation-delay: -32.4s; }
+.cardIndex73::before { animation-delay: -32.85s; }
+.cardIndex74::before { animation-delay: -33.3s; }
+.cardIndex75::before { animation-delay: -33.75s; }
+.cardIndex76::before { animation-delay: -34.2s; }
+.cardIndex77::before { animation-delay: -34.65s; }
+.cardIndex78::before { animation-delay: -35.1s; }
+.cardIndex79::before { animation-delay: -35.55s; }
+.cardIndex80::before { animation-delay: -36.0s; }
+.cardIndex81::before { animation-delay: -36.45s; }
+.cardIndex82::before { animation-delay: -36.9s; }
+.cardIndex83::before { animation-delay: -37.35s; }
+.cardIndex84::before { animation-delay: -37.8s; }
+.cardIndex85::before { animation-delay: -38.25s; }
+.cardIndex86::before { animation-delay: -38.7s; }
+.cardIndex87::before { animation-delay: -39.15s; }
+.cardIndex88::before { animation-delay: -39.6s; }
+.cardIndex89::before { animation-delay: -40.05s; }
+.cardIndex90::before { animation-delay: -40.5s; }
+.cardIndex91::before { animation-delay: -40.95s; }
+.cardIndex92::before { animation-delay: -41.4s; }
+.cardIndex93::before { animation-delay: -41.85s; }
+.cardIndex94::before { animation-delay: -42.3s; }
+.cardIndex95::before { animation-delay: -42.75s; }
+.cardIndex96::before { animation-delay: -43.2s; }
+.cardIndex97::before { animation-delay: -43.65s; }
+.cardIndex98::before { animation-delay: -44.1s; }
+.cardIndex99::before { animation-delay: -44.55s; }

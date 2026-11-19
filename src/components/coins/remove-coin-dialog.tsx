@@ -85,7 +85,7 @@ export default function RemoveCoinDialog() {
                   checked={coinIdToRemove === coin.id}
                   onChange={() => setCoinIdToRemove(coin.id)}
                 />
-                <img src={coin.image} alt="" className={styles.coinIcon} />
+                <img src={coin.image} alt={coin.name} className={styles.coinIcon} />
                 <span>{coin.name}</span>
                 <span className={styles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
               </label>

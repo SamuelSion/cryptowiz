@@ -1,9 +1,8 @@
-import type { CSSProperties } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { toggleCoinOff, toggleCoinOn } from "../../store/slices/selected-coins-slice";
 import ToggleSwitch from "../common/toggle-switch";
 import MoreInfoPanel from "./more-info-panel";
-import type { CoinMarket } from "../../types/coin";
+import type { CoinMarket } from "../../models/coin";
 import styles from "./coin-card.module.css";
 
 interface CoinCardProps {
@@ -23,13 +22,12 @@ export default function CoinCard({ coin, index }: CoinCardProps) {
     }
   }
 
+  const indexClass = styles[`cardIndex${index % 100}`] ?? "";
+
   return (
-    <article
-      className={`${styles.card} ${isSelected ? styles.cardTracked : ""}`}
-      style={{ "--card-index": index } as CSSProperties}
-    >
+    <article className={`${styles.card} ${indexClass} ${isSelected ? styles.cardTracked : ""}`}>
       <div className={styles.header}>
-        <img src={coin.image} alt="" className={styles.icon} loading="lazy" />
+        <img src={coin.image} alt={coin.name} className={styles.icon} loading="lazy" />
         <div className={styles.titles}>
           <h3 className={styles.name}>{coin.name}</h3>
           <span className={styles.symbol}>{coin.symbol.toUpperCase()}</span>
